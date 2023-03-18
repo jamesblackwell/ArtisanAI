@@ -15,7 +15,7 @@ This package was written almost entirely by GPT-4.
 
 ## Requirements
 
-- Laravel 6.x, 7.x, or 8.x
+- Laravel 10
 - PHP 7.2 or higher
 - OpenAI API key
 
