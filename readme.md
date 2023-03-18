@@ -1,5 +1,7 @@
 # ArtisanAI
 
+WIP: This package is still in development but since it's only designed for use in your development environment, feel free to start using it!
+
 ArtisanAI is a Laravel package that helps you scaffold your Laravel application by generating code files such as migrations, controllers, models, and tests using OpenAI's GPT-4 API. The package provides a set of easy-to-use Artisan commands that allow you to create these files with the help of AI-generated code.
 
 This package was written almost entirely by GPT-4.
