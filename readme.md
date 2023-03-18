@@ -2,9 +2,15 @@
 
 WIP: This package is still in development but since it's only designed for use in your development environment, feel free to start using it!
 
-ArtisanAI is a Laravel package that helps you scaffold your Laravel application by generating code files such as migrations, controllers, models, and tests using OpenAI's GPT-4 API. The package provides a set of easy-to-use Artisan commands that allow you to create these files with the help of AI-generated code.
+ArtisanAI is a Laravel package that helps you scaffold your Laravel application by generating code files such as migrations, controllers, models, and tests using OpenAI's GPT-4. It saves a lot of copy and pasting back from your IDE and ChatGPT.
 
-This package was written almost entirely by GPT-4.
+It allows you to do stuff like this:
+
+```
+php artisan ai:migration "add two columns to images table called file name and file size, drop the column called file path, and rename the column called file type to file extension"
+```
+
+Then the package will automatically add the migration to the correct folder in your Laravel application.
 
 ## Features
 
@@ -13,18 +19,12 @@ This package was written almost entirely by GPT-4.
 - Easy integration with Laravel applications
 - Automatically saves generated code to the appropriate folders
 
-## Requirements
-
-- Laravel 10
-- PHP 7.2 or higher
-- OpenAI API key
-
 ## Installation
 
-1. Install the package using Composer:
+1. Install the package using Composer. It's recommended to install the package as a development dependency:
 
 ```
-composer require jamesblackwell/artisan-ai
+composer require --dev jamesblackwell/artisan-ai
 ```
 
 2. Publish the configuration file by running:

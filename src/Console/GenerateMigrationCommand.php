@@ -3,7 +3,7 @@
 namespace JamesBlackwell\ArtisanAI\Console;
 
 use Illuminate\Console\Command;
-use JamesBlackwell\ArtisanAI\OpenAI\Gpt4Handler;
+use JamesBlackwell\ArtisanAI\OpenAI\GptHandler;
 
 
 class GenerateMigrationCommand extends Command
@@ -22,20 +22,33 @@ class GenerateMigrationCommand extends Command
             return;
         }
 
-        $gpt4Handler = new Gpt4Handler();
-        $migrationCode = $gpt4Handler->generateCode($input, 'Write only Laravel PHP code. Generate a migration file. Return only code, no text');
+        $GptHandler = new GptHandler();
+        $systemPrompt = 'You are a Laravel PHP migration code generating assistant. Respond only in this JSON format: {file: "contents of migration file", filename: "migration_file_name_without_date", comments: "additional notes for user"}';
+        $response = $GptHandler->generateCode($input, $systemPrompt);
 
-        preg_match('/\bcreate_(.+)_table\b/', $migrationCode, $matches);
+        $response = json_decode($response);
 
-        if (!empty($matches) && isset($matches[1])) {
-            $filename = date('Y_m_d_His') . "_create_{$matches[1]}_table.php";
-        } else {
-            $filename = date('Y_m_d_His') . '_ai_migration.php';
+        if (!$response) {
+            $this->error('Error: OpenAI API response is not valid JSON. Try tweaking your prompt.');
+            return;
         }
 
-        $path = base_path("database/migrations/{$filename}");
-        file_put_contents($path, $migrationCode);
+        if (!isset($response->file)) {
+            $this->error('Error: OpenAI API response is missing the file property. Try tweaking your prompt.');
+            return;
+        }
 
-        $this->info("Migration file created: {$filename}");
+        $filename = date('Y_m_d_His') . '_' . $response->filename ?? 'custom_ai_migration.php';
+
+        $path = base_path("database/migrations/{$filename}.php");
+        file_put_contents($path, $response->file);
+
+        $info = "Migration file created: {$filename}.";
+
+        if ($response->comments) {
+            $info .= " {$response->comments}";
+        }
+
+        $this->info($info);
     }
 }
